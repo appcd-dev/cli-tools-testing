@@ -1,0 +1,22 @@
+[
+	{
+		"Name": "AutoDesk ValidName - Resource Override Custom Module",
+		"OverrideResourceTypeDetails": {
+			"aws_vpc": {	
+				"OverrideType": "custom_vpc",
+				"Locked": true,
+				"TemplateID": "497054cc-06dc-45c8-8681-247d88976970"
+			},
+			"aws_subnet": {
+				"OverrideType": "custom_subnet",
+				"Locked": true,
+				"TemplateID": "71b2ed4c-ad85-40ef-89bc-174f69569480"
+			},
+			"aws_lambda_function": {
+				"OverrideType": "custom_lambda",
+				"Locked": true,
+				"TemplateID": "d3eb83b7-20d5-4db5-adc0-09343a2232c3"
+			}
+		}
+	}
+]

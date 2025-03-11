@@ -1,0 +1,25 @@
+{
+  "name": "cloud2code-automation",
+  "version": "1.0.0",
+  "description": "CLI testing framework for cloud operations",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage --reporters=default --reporters=jest-junit",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "ci": "npm ci && npm run build && npm run test:ci"
+  },
+  "keywords": ["cli", "testing", "automation", "cloud"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.19",
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}
