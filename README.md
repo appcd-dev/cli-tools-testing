@@ -6,9 +6,6 @@ A TypeScript-based testing framework for automating CLI command testing, specifi
 
 - Execute CLI commands with various flags and options
 - Verify command output and exit codes
-- Handle interactive prompts through environment variables
-- Support for async/await testing
-- TypeScript support with type safety
 
 ## Installation
 
