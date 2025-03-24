@@ -12,7 +12,7 @@ describe('CLI Tests', () => {
     it('should successfully give the version of cloud2code cli', async () => {
       const result = await cli.expectOutputContains({
         command: 'version',
-      }, '0.48.1');
+      }, '0.48.2');
       // expect(result.stdout).toContain('0.48.1');
     });
 
