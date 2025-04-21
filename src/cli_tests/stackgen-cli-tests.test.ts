@@ -8,15 +8,15 @@ describe('CLI Tests', () => {
     cli = new CliTestHelper('/opt/homebrew/bin/stackgen');
   });
 
-  describe.only('Stackgen CLI Testing', () => {
+  describe('Stackgen CLI Testing', () => {
     it('should successfully give the version of cloud2code cli', async () => {
       const result = await cli.expectOutputContains({
         command: 'version',
-      }, '0.48.2');
+      }, '0.52.0');
       // expect(result.stdout).toContain('0.48.1');
     });
 
-    it('should successfully import resource-override-policy', async () => {
+    it('should throw unique name excception when importing resource-override-policy', async () => {
       const result = await cli.expectCommandFailure({
         command: 'upload resource-override-policy',
         args: [
@@ -53,12 +53,28 @@ describe('CLI Tests', () => {
       const result = await cli.expectCommandFailure({
         command: 'import aws',
         args: [
-          '--region', 'invalid-region',
-        
+          '--region', 'invalid-region'
         ]
       });
       expect(result.exitCode).toBe(1);
       // expect(result.stderr).toContain('Could not connect to the endpoint URL: "https://s3.invalid-region.amazonaws.com/"');
+    });
+
+    it('stackgen import with default region', async () => {
+      const result = await cli.expectCommandFailure({
+        command: 'import state',
+        args: [
+          '--file', '../inputs/tfstates/aws/aws_vpc.tfstate'
+        ]
+      });
+      expect(result.exitCode).toBe(1);
+      expect(result.stdout).toContain('Appstack created successfully');
+      expect(result.stdout).toContain('Starting Terraform state import');
+      expect(result.stdout).toContain('cloudProvider: gcp');
+      expect(result.stdout).toContain('Terraform state file uploaded successfully');
+      expect(result.stdout).toContain('appstackID: ');
+      expect(result.stdout).toContain('baseAppStackID: ');
+      expect(result.stdout).toContain('Imported state successfully');
     });
 
   });

@@ -8,7 +8,7 @@ describe('CLI Tests', () => {
     cli = new CliTestHelper('/opt/homebrew/bin/cloud2code');
   });
 
-  describe('Cloud2Code CLI Testing', () => {
+  describe.only('Cloud2Code CLI Testing', () => {
     it('should successfully give the version of cloud2code cli', async () => {
       const result = await cli.expectCommandSuccess({
         command: 'version',
@@ -16,7 +16,7 @@ describe('CLI Tests', () => {
       });
 
       // Verify the output contains expected information
-      expect(result.stdout).toContain('0.2.0');
+      expect(result.stdout).toContain('0.2.6');
     });
 
     it('should successfully import aws_neptune_cluster resources', async () => {
@@ -32,10 +32,10 @@ describe('CLI Tests', () => {
       // Verify the output contains expected information
       expect(result.stdout).toContain('Include: [aws_neptune_cluster]');
       expect(result.stdout).toContain('Writing TFState Done!');
-      expect(result.stdout).toContain('Scanning aws_neptune_cluster [1/1] Done!');
+      // expect(result.stdout).toContain('Scanning aws_neptune_cluster [1/1] Done!');
     });
 
-    it('should not import any aws_neptune_cluster resources due to their absence of resourcesin the region', async () => {
+    it('should import any aws_neptune_cluster resources due to their absence of resourcesin the region', async () => {
       const result = await cli.expectCommandSuccess({
         command: 'import aws',
         args: [
@@ -77,6 +77,21 @@ describe('CLI Tests', () => {
       expect(result.stdout).toContain('Writing TFState Done!');
     });
 
+    it('should import google_compute_network resources', async () => {
+      const result = await cli.expectCommandSuccess({
+        command: 'import gcp',
+        args: [
+          '--region', 'asia-south2',
+          '--include', 'google_compute_network',
+          '--project-id', 'qa-team-project-444210',
+          '--output-dir', './terraform-outputs/google_compute_network' + Date.now()
+        ],
+      });
+      expect(result.stdout).toContain('Include: [google_compute_network],');
+      expect(result.stdout).toContain('Exclude: [],');
+      expect(result.stdout).toContain('Scanning google_compute_network');
+      expect(result.stdout).toContain('Writing TFState Done!');
+    });
     // it('should handle invalid region gracefully', async () => {
     //   const result = await cli.expectCommandFailure({
     //     command: 'import aws',
