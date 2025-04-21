@@ -12,3 +12,7 @@ modern.jsonp
 resources/sass/.sass-cache/
 resources/.arch-internal-preview.css
 .arch-internal-preview.css
+.DS_Store
+node_modules/*
+src/.DS_Store
+node_modules
