@@ -13,7 +13,7 @@ describe('CLI Tests', () => {
     it('should successfully give the version of stackgen cli', async () => {
       const result = await cli.expectOutputContains({
         command: 'version',
-      }, '0.61.0');
+      }, '0.62.0');
     });
 
     it('should successfully upload resource-restriction-policy', async () => {

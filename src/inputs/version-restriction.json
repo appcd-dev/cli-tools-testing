@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "Test Version Restriction Policy",
+    "Description": "Sample policy for CI testing",
+    "RestrictionDetails": {
+      "aws_vpc": {
+        "MinVersion": "4.0.0",
+        "MaxVersion": "5.0.0",
+        "AllowedVersions": ["4.1.0", "4.2.0", "4.3.0"]
+      },
+      "aws_subnet": {
+        "MinVersion": "4.0.0", 
+        "MaxVersion": "5.0.0",
+        "AllowedVersions": ["4.1.0", "4.2.0", "4.3.0"]
+      },
+      "aws_lambda_function": {
+        "MinVersion": "4.0.0",
+        "MaxVersion": "5.0.0", 
+        "AllowedVersions": ["4.1.0", "4.2.0", "4.3.0"]
+      }
+    }
+  }
+] 
