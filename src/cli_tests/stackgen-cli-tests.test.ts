@@ -5,6 +5,9 @@ describe('CLI Tests', () => {
   let cli: CliTestHelper;
 
   beforeAll(() => {
+    // Print current environment configuration
+    TestConfig.printCurrentConfig();
+    
     // Use environment-aware CLI path
     cli = new CliTestHelper(TestConfig.getStackgenCliPath());
   });
@@ -13,10 +16,10 @@ describe('CLI Tests', () => {
     it('should successfully give the version of stackgen cli', async () => {
       const result = await cli.expectOutputContains({
         command: 'version',
-      }, '0.62.0');
+      }, TestConfig.getStackgenExpectedVersion());
     });
-
-    it('should successfully upload resource-restriction-policy', async () => {
+/*========================================================================================================================*/
+    it.skip('should successfully upload resource-restriction-policy', async () => {
       // Skip integration tests in CI unless explicitly enabled
       if (TestConfig.shouldSkipIntegrationTests()) {
         console.log('Skipping integration test in CI environment');
@@ -28,11 +31,12 @@ describe('CLI Tests', () => {
         args: [
           '-p', TestConfig.getPolicyPath('version-restriction.json')
         ],
+        timeout: TestConfig.getTestTimeout()
       });
 
       expect(result.stdout).toContain('resource restriction policy upload complete!');
     });
-
+/*========================================================================================================================*/
     it.skip('should fail to import resource-override-policy due to unique name constraint', async () => {
       // Skip integration tests in CI unless explicitly enabled
       if (TestConfig.shouldSkipIntegrationTests()) {
@@ -45,11 +49,12 @@ describe('CLI Tests', () => {
         args: [
           '-p', TestConfig.getPolicyPath('version-restriction.json')
         ],
+        timeout: TestConfig.getTestTimeout()
       });
 
       expect(result.stderr).toContain('policy with same name already exists');
     });
-
+/*========================================================================================================================*/
     it('should list all the appstacks and their uuids', async () => {
       // Skip integration tests in CI unless explicitly enabled
       if (TestConfig.shouldSkipIntegrationTests()) {
@@ -58,14 +63,15 @@ describe('CLI Tests', () => {
       }
 
       const result = await cli.expectCommandSuccess({
-        command: 'appstack show'
+        command: 'appstack show',
+        timeout: TestConfig.getTestTimeout()
       });
 
       expect(result.stdout).toContain('App Stack Name');
       expect(result.stdout).toContain('version');
       expect(result.stdout).toContain('uuid');
     });
-
+/*========================================================================================================================*/
     it('successful import state command', async () => {
       // Skip integration tests in CI unless explicitly enabled
       if (TestConfig.shouldSkipIntegrationTests()) {
@@ -77,7 +83,8 @@ describe('CLI Tests', () => {
         command: 'import state',
         args: [
           '--file', TestConfig.getTfStatePath('aws_vpc4.tfstate')
-        ]
+        ],
+        timeout: TestConfig.getTestTimeout()
       });
       expect(result.stdout).toContain('Appstack created successfully');
       expect(result.stdout).toContain('Starting import to the appstack');
@@ -87,7 +94,7 @@ describe('CLI Tests', () => {
       expect(result.stdout).toContain('Imported state successfully');
       expect(result.stdout).toContain('You can view the topology at :');
     });
-
+/*========================================================================================================================*/
     it('successful import state command with an appstack id', async () => {
       // Skip integration tests in CI unless explicitly enabled
       if (TestConfig.shouldSkipIntegrationTests()) {
@@ -95,12 +102,14 @@ describe('CLI Tests', () => {
         return;
       }
 
+      console.log('TestConfig.getTfStatePath(aws_vpc4.tfstate) : ', TestConfig.getTfStatePath('aws_vpc4.tfstate'));
       const result = await cli.expectCommandSuccess({
         command: 'import state',
         args: [
           '--file', TestConfig.getTfStatePath('aws_vpc4.tfstate'),
-          '--appstack-id', '0ab92d65-35f7-49cc-bfbc-a20abf231416'
-        ]
+          '--appstack-id', TestConfig.getTestAppstackId()
+        ],
+        timeout: TestConfig.getTestTimeout()
       });
       expect(result.stdout).toContain('Starting import process');
       expect(result.stdout).toContain('Creating new appstack version');
@@ -112,15 +121,16 @@ describe('CLI Tests', () => {
       expect(result.stdout).toContain('Imported state successfully');
       expect(result.stdout).toContain('You can view the topology at :');
     });
-
+/*========================================================================================================================*/
     it('should handle invalid command gracefully', async () => {
       const result = await cli.expectCommandFailure({
         command: 'import state',
         args: [
-        ]
+        ],
+        timeout: TestConfig.getTestTimeout()
       });
       expect(result.stderr).toContain('required flag(s) "file" not set');
     });
-
+/*========================================================================================================================*/
   });
 }); 

@@ -5,6 +5,9 @@ describe.skip('CLI Tests', () => {
   let cli: CliTestHelper;
 
   beforeAll(() => {
+    // Print current environment configuration
+    TestConfig.printCurrentConfig();
+    
     // Use environment-aware CLI path
     cli = new CliTestHelper(TestConfig.getCloud2CodeCliPath());
   });
@@ -16,7 +19,7 @@ describe.skip('CLI Tests', () => {
       });
 
       // Verify the output contains expected information
-      expect(result.stdout).toContain('0.2.0');
+      expect(result.stdout).toContain(TestConfig.getCloud2CodeExpectedVersion());
     });
 
     it('should successfully import aws_neptune_cluster resources', async () => {
@@ -29,10 +32,11 @@ describe.skip('CLI Tests', () => {
       const result = await cli.expectCommandSuccess({
         command: 'import aws',
         args: [
-          '--region', 'eu-west-2',
+          '--region', TestConfig.getAwsPrimaryRegion(),
           '--include', 'aws_neptune_cluster',
-          '--output-dir', './terraform-outputs/aws_neptune_cluster'
+          '--output-dir', TestConfig.getOutputDir('aws_neptune_cluster')
         ],
+        timeout: TestConfig.getTestTimeout()
       });
 
       // Verify the output contains expected information
@@ -51,10 +55,11 @@ describe.skip('CLI Tests', () => {
       const result = await cli.expectCommandSuccess({
         command: 'import aws',
         args: [
-          '--region', 'us-west-2',
+          '--region', TestConfig.getAwsSecondaryRegion(),
           '--include', 'aws_neptune_cluster',
-          '--output-dir', './terraform-outputs/aws_neptune_cluster'
+          '--output-dir', TestConfig.getOutputDir('aws_neptune_cluster')
         ],
+        timeout: TestConfig.getTestTimeout()
       });
 
       // Verify the output contains expected information
@@ -73,10 +78,11 @@ describe.skip('CLI Tests', () => {
       const result = await cli.expectCommandSuccess({
         command: 'import aws',
         args: [
-          '--region', 'eu-west-2',
+          '--region', TestConfig.getAwsPrimaryRegion(),
           '--include', 'aws_iam_account_password_policy,aws_iam_openid_connect_provider,aws_iam_instance_profile,aws_iam_access_key,aws_iam_policy,aws_iam_role,aws_iam_saml_provider,aws_iam_user,aws_iam_user_policy,aws_iam_user_policy_attachment,aws_iam_role_policy',
-          '--output-dir', './terraform-outputs/aws_iam' + Date.now()
+          '--output-dir', TestConfig.getOutputDir('aws_iam_' + Date.now())
         ],
+        timeout: TestConfig.getTestTimeout()
       });
 
       // Verify the output contains expected information

@@ -58,7 +58,18 @@ export class CliTestHelper {
 
   async expectCommandSuccess(options: CliCommandOptions): Promise<CliCommandResult> {
     const result = await this.executeCommand(options);
-    expect(result.exitCode).toBe(0);
+    
+    if (result.exitCode !== 0) {
+      const { command, args = [] } = options;
+      const fullCommand = `${this.cliPath} ${command} ${args.join(' ')}`;
+      throw new Error(
+        `Command failed with exit code ${result.exitCode}\n` +
+        `Command: ${fullCommand}\n` +
+        `Stdout: ${result.stdout}\n` +
+        `Stderr: ${result.stderr}`
+      );
+    }
+    
     return result;
   }
 

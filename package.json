@@ -7,13 +7,31 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --coverage --reporters=default --reporters=jest-junit",
+    "test:local": "TEST_ENV=local jest",
+    "test:dev": "TEST_ENV=dev jest",
+    "test:stage": "TEST_ENV=stage jest",
+    "test:local:watch": "TEST_ENV=local jest --watch",
+    "test:dev:watch": "TEST_ENV=dev jest --watch",
+    "test:stage:watch": "TEST_ENV=stage jest --watch",
+    "test:local:ci": "TEST_ENV=local jest --ci --coverage --reporters=default --reporters=jest-junit",
+    "test:dev:ci": "TEST_ENV=dev jest --ci --coverage --reporters=default --reporters=jest-junit",
+    "test:stage:ci": "TEST_ENV=stage jest --ci --coverage --reporters=default --reporters=jest-junit",
     "build": "tsc",
+    "validate-config": "node scripts/validate-config.js",
     "start": "node dist/index.js",
-    "ci": "npm ci && npm run build && npm run test:ci"
+    "ci": "npm ci && npm run build && npm run validate-config && npm run test:ci"
   },
-  "keywords": ["cli", "testing", "automation", "cloud"],
+  "keywords": [
+    "cli",
+    "testing",
+    "automation",
+    "cloud"
+  ],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",

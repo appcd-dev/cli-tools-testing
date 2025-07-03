@@ -1,18 +1,22 @@
 import { CliTestHelper } from '../../utils/CliTestHelper';
+import { TestConfig } from '../../utils/TestConfig';
 
 describe('CLI Tests', () => {
     let cli: CliTestHelper;
 
     beforeAll(() => {
-        // Replace this with the actual path to your CLI executable
-        cli = new CliTestHelper('/opt/homebrew/bin/stackgen');
+        // Print current environment configuration
+        TestConfig.printCurrentConfig();
+        
+        // Use environment-aware CLI path
+        cli = new CliTestHelper(TestConfig.getStackgenCliPath());
     });
 
     describe.only('Stackgen CLI Testing - ILM Happy paths', () => {
         it('should successfully give the version of cloud2code cli', async () => {
             const result = await cli.expectOutputContains({
                 command: 'version',
-            }, '0.61.0');
+            }, TestConfig.getStackgenExpectedVersion());
             // expect(result.stdout).toContain('0.48.1');
         });
     });
