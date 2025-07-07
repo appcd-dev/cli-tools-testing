@@ -13,13 +13,21 @@
     "test:local:watch": "TEST_ENV=local jest --watch",
     "test:dev:watch": "TEST_ENV=dev jest --watch",
     "test:stage:watch": "TEST_ENV=stage jest --watch",
-    "test:local:ci": "TEST_ENV=local jest --ci --coverage --reporters=default --reporters=jest-junit",
-    "test:dev:ci": "TEST_ENV=dev jest --ci --coverage --reporters=default --reporters=jest-junit",
-    "test:stage:ci": "TEST_ENV=stage jest --ci --coverage --reporters=default --reporters=jest-junit",
+    "test:local:ci": "TEST_ENV=local jest --ci --coverage --reporters=default --reporters=jest-junit && npm run allure:generate",
+    "test:dev:ci": "TEST_ENV=dev jest --ci --coverage --reporters=default --reporters=jest-junit && npm run allure:generate",
+    "test:stage:ci": "TEST_ENV=stage jest --ci --coverage --reporters=default --reporters=jest-junit && npm run allure:generate",
     "build": "tsc",
     "validate-config": "node scripts/validate-config.js",
     "start": "node dist/index.js",
-    "ci": "npm ci && npm run build && npm run validate-config && npm run test:ci"
+    "ci": "npm ci && npm run build && npm run validate-config && npm run test:ci && npm run allure:generate",
+    "allure:generate": "allure generate $(ls -td allure-results-* | head -1) --clean -o allure-report-$(date +%Y%m%d_%H%M%S)",
+    "allure:serve": "allure serve $(ls -td allure-results-* | head -1)",
+    "allure:open": "allure open $(ls -td allure-report-* | head -1)",
+    "allure:clean": "rm -rf allure-results-* allure-report-*",
+    "test:allure": "jest && npm run allure:generate && npm run allure:open",
+    "test:local:allure": "TEST_ENV=local jest && npm run allure:generate && npm run allure:open",
+    "test:dev:allure": "TEST_ENV=dev jest && npm run allure:generate && npm run allure:open",
+    "test:stage:allure": "TEST_ENV=stage jest && npm run allure:generate && npm run allure:open"
   },
   "keywords": [
     "cli",
@@ -36,6 +44,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",
     "jest": "^29.7.0",
+    "jest-html-reporter": "^4.3.0",
     "jest-junit": "^16.0.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"

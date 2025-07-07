@@ -5,3 +5,14 @@ logs
 node_modules
 src/.DS_Store
 terraform-outputs
+
+# Allure Reports (with timestamps)
+allure-results-*
+allure-report-*
+.allure/
+
+# Test Coverage
+coverage/
+
+# Jest
+junit.xml
