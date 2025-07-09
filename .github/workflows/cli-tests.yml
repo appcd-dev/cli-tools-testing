@@ -32,12 +32,43 @@ jobs:
         STACKGEN_URL: ${{ secrets.STACKGEN_URL }}
       run: npm run test:dev:ci
     
+    - name: Generate Test Summary
+      if: always()
+      id: test-summary
+      run: |
+        if [ -f "reports/test-report.html" ]; then
+          echo "test-report-exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "test-report-exists=false" >> $GITHUB_OUTPUT
+        fi
+        
+        # Extract test statistics if Jest output is available
+        if [ -f "package.json" ]; then
+          echo "total-tests=Available in reports" >> $GITHUB_OUTPUT
+          echo "test-status=Check reports folder" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Slack Alert
       if: always()
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
         channel: '#cli-tests'
-        text: 'CLI Tests workflow completed with status: ${{ job.status }}'
+        author_name: 'CLI Tests Pipeline'
+        text: |
+          🧪 **CLI Tests Workflow Completed**
+          
+          **📊 Test Results:**
+          • Status: ${{ job.status }}
+          • Test Reports: ${{ steps.test-summary.outputs.test-report-exists == 'true' && '✅ Available' || '❌ Not found' }}
+          • Test Info: ${{ steps.test-summary.outputs.test-status }}
+          
+          **📋 Job Details:**
+          • Job URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        fields: |
+          {
+            "Status": "${{ job.status }}",
+            "Reports": "${{ steps.test-summary.outputs.test-report-exists }}"
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
