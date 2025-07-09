@@ -53,7 +53,7 @@ export class TestConfig {
   // Expected Version Methods
   static getStackgenExpectedVersion(): string {
     this.initialize();
-    return process.env.STACKGEN_EXPECTED_VERSION || '0.62.0';
+    return process.env.STACKGEN_EXPECTED_VERSION || '0.63.4';
   }
 
   static getCloud2CodeExpectedVersion(): string {
@@ -81,7 +81,7 @@ export class TestConfig {
   // Test Data Path Methods
   static getTestDataBasePath(): string {
     this.initialize();
-    return process.env.TEST_DATA_PATH || '/var/lib/testData';
+    return process.env.TEST_DATA_PATH || './inputs/testData';
   }
 
   static getPolicyPath(policyFile: string): string {

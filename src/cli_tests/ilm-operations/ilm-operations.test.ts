@@ -13,7 +13,7 @@ describe('CLI Tests', () => {
     });
 
     describe.only('Stackgen CLI Testing - ILM Happy paths', () => {
-        it('should successfully give the version of cloud2code cli', async () => {
+        it('should successfully give the version of stackgen cli', async () => {
             const result = await cli.expectOutputContains({
                 command: 'version',
             }, TestConfig.getStackgenExpectedVersion());
