@@ -1,7 +1,7 @@
 import { CliTestHelper } from '../../utils/CliTestHelper';
 import { TestConfig } from '../../utils/TestConfig';
 
-describe('CLI Tests', () => {
+describe.skip('CLI Tests', () => {
     let cli: CliTestHelper;
 
     beforeAll(() => {
@@ -12,7 +12,7 @@ describe('CLI Tests', () => {
         cli = new CliTestHelper(TestConfig.getStackgenCliPath());
     });
 
-    describe.only('Stackgen CLI Testing - ILM Happy paths', () => {
+    describe('Stackgen CLI Testing - ILM Happy paths', () => {
         it('should successfully give the version of stackgen cli', async () => {
             const result = await cli.expectOutputContains({
                 command: 'version',

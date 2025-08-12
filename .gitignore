@@ -16,3 +16,25 @@ coverage/
 
 # Jest
 junit.xml
+reports/test-report-2025-08-12_13-41-10-445Z.html
+terraform-outputs-stage/aws_iam_1754988218892
+terraform-outputs-stage/aws_iam_1754988620813
+terraform-outputs-stage/aws_iam_1754990867158
+terraform-outputs-stage/aws_iam_1754991004616
+terraform-outputs-stage/aws_iam_1754997635618
+terraform-outputs-stage/aws_iam_1754998152719
+terraform-outputs-stage/aws_iam_1754998321626
+terraform-outputs-stage/aws_iam_1754998573624
+terraform-outputs-stage/aws_iam_1755005325737
+terraform-outputs-stage/aws_iam_1755005452716
+terraform-outputs-stage/aws_iam_1755005692841
+terraform-outputs-stage/aws_iam_1755006112260
+terraform-outputs-stage/aws_neptune_cluster
+terraform-outputs-stage/aws_vpc
+examples/allure-example.test.ts
+examples/example-test.ts
+dist/cli_tests
+dist/utils
+commands/stackgen
+allure.config.js
+STACKGEN_COMMANDS_TESTED.md

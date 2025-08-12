@@ -53,7 +53,7 @@ export class TestConfig {
   // Expected Version Methods
   static getStackgenExpectedVersion(): string {
     this.initialize();
-    return process.env.STACKGEN_EXPECTED_VERSION || '0.63.4';
+    return process.env.STACKGEN_EXPECTED_VERSION || '0.66.0';
   }
 
   static getCloud2CodeExpectedVersion(): string {
@@ -81,13 +81,24 @@ export class TestConfig {
   // Test Data Path Methods
   static getTestDataBasePath(): string {
     this.initialize();
-    return process.env.TEST_DATA_PATH || './inputs/testData';
+    const basePath = this.getInputsBasePath();
+    const testDataBasePath = process.env.TEST_DATA_BASE_PATH || './testData';;
+
+    if (testDataBasePath && testDataBasePath.trim()) {
+      return path.join(basePath, testDataBasePath);
+    }
+    return path.join(basePath);
+  }
+
+  static getInputsBasePath(): string {
+    this.initialize();
+    return process.env.INPUTS_BASE_PATH || './inputs';
   }
 
   static getPolicyPath(policyFile: string): string {
     this.initialize();
-    const basePath = this.getTestDataBasePath();
-    const policyBasePath = process.env.POLICY_BASE_PATH;
+    const basePath = this.getInputsBasePath();
+    const policyBasePath = process.env.POLICY_BASE_PATH || './policies';;
 
     if (policyBasePath && policyBasePath.trim()) {
       return path.join(basePath, policyBasePath, policyFile);

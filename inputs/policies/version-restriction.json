@@ -1,23 +1,15 @@
-[
-  {
-    "Name": "Test Version Restriction Policy",
-    "Description": "Sample policy for CI testing",
-    "RestrictionDetails": {
-      "aws_vpc": {
-        "MinVersion": "4.0.0",
-        "MaxVersion": "5.0.0",
-        "AllowedVersions": ["4.1.0", "4.2.0", "4.3.0"]
-      },
-      "aws_subnet": {
-        "MinVersion": "4.0.0", 
-        "MaxVersion": "5.0.0",
-        "AllowedVersions": ["4.1.0", "4.2.0", "4.3.0"]
-      },
-      "aws_lambda_function": {
-        "MinVersion": "4.0.0",
-        "MaxVersion": "5.0.0", 
-        "AllowedVersions": ["4.1.0", "4.2.0", "4.3.0"]
-      }
-    }
-  }
-] 
+{
+  "name": "Allow latest version of s3",
+  "description": "This restriction will only allow for resources with ResourcType aws_s3, or the specified custom modules.",
+  "resources": [
+          "aws_s3"
+  ],
+  "customModuleFilters": [
+          {
+                  "provider": "aws",
+                  "resourceType": "custom_aws_s3",
+                  "baseId": "c4a35d5f-8a5d-4eb8-8c61-eadaa3fa5b99",
+                  "templateId": "06197be1-6445-4c8f-b05e-e7ac068ba0ac"
+          }
+  ]
+}

@@ -62,12 +62,30 @@ export class CliTestHelper {
     if (result.exitCode !== 0) {
       const { command, args = [] } = options;
       const fullCommand = `${this.cliPath} ${command} ${args.join(' ')}`;
-      throw new Error(
-        `Command failed with exit code ${result.exitCode}\n` +
-        `Command: ${fullCommand}\n` +
-        `Stdout: ${result.stdout}\n` +
-        `Stderr: ${result.stderr}`
-      );
+      
+      // Create a detailed error message that will appear in HTML reports
+      const errorDetails = [
+        '═══════════════════════════════════════════════════════════════',
+        '🚫 COMMAND EXECUTION FAILED',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        `📋 FAILED COMMAND:`,
+        `   ${fullCommand}`,
+        '',
+        `❌ EXIT CODE: ${result.exitCode}`,
+        '',
+        '📤 STDOUT OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stdout || '(no output)',
+        '',
+        '🔥 STDERR OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stderr || '(no errors)',
+        '',
+        '═══════════════════════════════════════════════════════════════'
+      ].join('\n');
+      
+      throw new Error(errorDetails);
     }
     
     return result;
@@ -79,16 +97,126 @@ export class CliTestHelper {
     return result;
   }
 
+
+
   async expectOutputContains(options: CliCommandOptions, expectedOutput: string): Promise<CliCommandResult> {
     const result = await this.executeCommand(options);
-    expect(result.stdout).toContain(expectedOutput);
+    
+    try {
+      expect(result.stdout).toContain(expectedOutput);
+    } catch (error) {
+      const { command, args = [] } = options;
+      const fullCommand = `${this.cliPath} ${command} ${args.join(' ')}`;
+      
+      // Create enhanced error message for output assertion failures
+      const errorDetails = [
+        '═══════════════════════════════════════════════════════════════',
+        '🚫 OUTPUT ASSERTION FAILED',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        `📋 EXECUTED COMMAND:`,
+        `   ${fullCommand}`,
+        '',
+        `❌ EXIT CODE: ${result.exitCode}`,
+        '',
+        `🔍 EXPECTED OUTPUT TO CONTAIN:`,
+        `   "${expectedOutput}"`,
+        '',
+        '📤 ACTUAL STDOUT OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stdout || '(no output)',
+        '',
+        '🔥 STDERR OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stderr || '(no errors)',
+        '',
+        '═══════════════════════════════════════════════════════════════'
+      ].join('\n');
+      
+      throw new Error(errorDetails);
+    }
+    
     return result;
   }
 
   async expectOutputMatches(options: CliCommandOptions, regex: RegExp): Promise<CliCommandResult> {
     const result = await this.executeCommand(options);
-    expect(result.stdout).toMatch(regex);
+    
+    try {
+      expect(result.stdout).toMatch(regex);
+    } catch (error) {
+      const { command, args = [] } = options;
+      const fullCommand = `${this.cliPath} ${command} ${args.join(' ')}`;
+      
+      // Create enhanced error message for regex assertion failures
+      const errorDetails = [
+        '═══════════════════════════════════════════════════════════════',
+        '🚫 REGEX ASSERTION FAILED',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        `📋 EXECUTED COMMAND:`,
+        `   ${fullCommand}`,
+        '',
+        `❌ EXIT CODE: ${result.exitCode}`,
+        '',
+        `🔍 EXPECTED OUTPUT TO MATCH REGEX:`,
+        `   ${regex}`,
+        '',
+        '📤 ACTUAL STDOUT OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stdout || '(no output)',
+        '',
+        '🔥 STDERR OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stderr || '(no errors)',
+        '',
+        '═══════════════════════════════════════════════════════════════'
+      ].join('\n');
+      
+      throw new Error(errorDetails);
+    }
+    
     return result;
+  }
+
+  /**
+   * Enhanced assertion helper that includes command details in failure messages
+   */
+  assertResultContains(result: CliCommandResult, options: CliCommandOptions, field: 'stdout' | 'stderr', expectedText: string): void {
+    const fieldValue = result[field];
+    
+    try {
+      expect(fieldValue).toContain(expectedText);
+    } catch (error) {
+      const { command, args = [] } = options;
+      const fullCommand = `${this.cliPath} ${command} ${args.join(' ')}`;
+      
+      const errorDetails = [
+        '═══════════════════════════════════════════════════════════════',
+        `🚫 ${field.toUpperCase()} ASSERTION FAILED`,
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        `📋 EXECUTED COMMAND:`,
+        `   ${fullCommand}`,
+        '',
+        `❌ EXIT CODE: ${result.exitCode}`,
+        '',
+        `🔍 EXPECTED ${field.toUpperCase()} TO CONTAIN:`,
+        `   "${expectedText}"`,
+        '',
+        '📤 ACTUAL STDOUT OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stdout || '(no output)',
+        '',
+        '🔥 STDERR OUTPUT:',
+        '───────────────────────────────────────────────────────────────',
+        result.stderr || '(no errors)',
+        '',
+        '═══════════════════════════════════════════════════════════════'
+      ].join('\n');
+      
+      throw new Error(errorDetails);
+    }
   }
 
   // // Table verification methods
